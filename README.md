@@ -1,4 +1,4 @@
-# ETHShanghai
+# LASTSAND
 
 
 - Team Member
