@@ -8,18 +8,10 @@ export default function WelcomePage() {
     <>
       <div className="home-welcome-page">
         <div className="app-intro">
-          <h3>To get started:</h3>
+          <h1>YOU ARE WHAT YOU READ</h1>
           <ul>
-            <li>
-              Edit component <code>src/features/home/WelcomePage.js</code> for this page.
-            </li>
-            <li>
-              Edit component <code>src/features/home/App.js</code> for the root container layout.
-            </li>
-            <li>
-              To see examples, access:&nbsp;
-              <Link to="/examples">/examples</Link>
-            </li>
+            Welcome to LASTSAND!
+            you can simply log in with Ethereum accounts and retrieve the content with OPML NFTs through the feeds.
           </ul>
         </div>
       </div>
