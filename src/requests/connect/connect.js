@@ -1,11 +1,13 @@
-import React from 'react'
-import { Spinner } from './Spinner'
+import React, {useState} from 'react'
+import { Button } from 'antd'
 import { injected } from './connectors'
 
 import { Web3ReactProvider, useWeb3React, } from '@web3-react/core'
 import { Web3Provider } from '@ethersproject/providers'
-import { useEagerConnect, useInactiveListener } from './hook'
+import { useInactiveListener } from './hook'
 import './Connect.css';
+import {GetTokenIdList} from "../GetTokenIdList";
+import {Subscription} from "../subscription/Subscription";
 
 function getLibrary(provider) {
   const library = new Web3Provider(provider)
@@ -13,34 +15,18 @@ function getLibrary(provider) {
   return library
 }
 
-function ChainId() {
-  const { chainId, library } = useWeb3React()
-
-  return (
-    <div className="ChainIdWrapper">
-      <span>Chain Id</span>
-      <span role="img" aria-label="chain">
-        ⛓
-      </span>
-      <span className="ChainIdText">{chainId ?? 'Not Connected'}</span>
-    </div>
-  )
-}
-
 function Connect() {
-  // const triedEager = useEagerConnect()
-
   return (
     <div>
-      <ChainId/>
-      <p>
-        Current value: n/a
-      </p>
-      <ConnectChain triedEager={true} />
+      <ConnectChain />
     </div>
   );
 }
 
+export function getCurrentAccount() {
+  const { connector, library, chainId, account, activate, deactivate, active, error } = useWeb3React();
+  return account;
+}
 
 export default function() {
   return (
@@ -51,6 +37,7 @@ export default function() {
 }
 
 function ConnectChain(props) {
+  const [loadings, setLoadings] = useState();
   const context = useWeb3React()
   const { connector, library, chainId, account, activate, deactivate, active, error } = context
 
@@ -63,22 +50,26 @@ function ConnectChain(props) {
 
   const activating = injected === activatingConnector
   const connected = injected === connector
-  const disabled = !props.triedEager || !!activatingConnector || !!error
+  const disabled = !!activatingConnector || !!error
 
-  useInactiveListener(!props.triedEager || !!activatingConnector)
+  useInactiveListener(!!activatingConnector)
 
   let isDisconnect = !error && chainId
   const buttonText = isDisconnect ? 'Disconnect' : (activating ? 'Connecting' : 'Connect' )
 
+  if (connected) {
+    console.log('Chain ID: ' + chainId)
+    console.log('Account: ' + account)
+    GetTokenIdList(account).then(res => {
+      Subscription(res)
+    })
+  }
+
   return (
-    <button
-      style={{
-        borderColor: activating ? 'orange' : connected ? 'green' : 'unset',
-        cursor: disabled ? 'unset' : 'pointer',
-        position: 'relative',
-      }}
-      className="ConnectButton"
+    <Button
+      type='primary'
       disabled={disabled}
+      size='large'
       onClick={() => {
         if (!isDisconnect) {
           setActivatingConnector(injected)
@@ -88,21 +79,7 @@ function ConnectChain(props) {
         }
       }}
     >
-      <div
-        style={{
-          position: 'absolute',
-          top: '0',
-          left: '0',
-          height: '100%',
-          display: 'flex',
-          alignItems: 'center',
-          color: 'black',
-          margin: '0 0 0 1rem'
-        }}
-      >
-        {activating && <Spinner color={'red'} style={{ height: '50%', marginLeft: '-1rem' }} />}
-      </div>
       { buttonText }
-    </button>
-  )
+    </Button>
+  );
 }
