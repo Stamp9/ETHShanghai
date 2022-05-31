@@ -1,7 +1,7 @@
 import React from 'react'
 import { useEffect, useState } from 'react'
 const axios = require('axios').default
-import Card from 'react-bootstrap/Card'
+import { Card } from 'antd'
 import './Rss.css'
 
 const corsUrl = 'https://api.rss2json.com/v1/api.json?rss_url='
@@ -30,10 +30,6 @@ export default function Rss() {
     }
   }
 
-  const openLink = (url) => {
-    window.location.href = url
-  }
-
   useEffect(() => {
     if (!initialized) {
       let url = 'https://gov.uniswap.org/posts.rss'
@@ -48,14 +44,14 @@ export default function Rss() {
       {list.map((l, i) => {
         console.log(l)
         return (
-          <Card key={i} className="feed-card">
-            <Card.Img variant="bottom" src={l.thumbnail} />
-            <Card.Title className="card-title">{l.title}</Card.Title>
-            <Card.Body>
+          <div className="site-card-border-less-wrapper">
+            <Card
+              title={l.title} bordered={true}
+              extra={<a href={l.link}>Go full reading</a>}
+            >
               <div style={{ padding: 15 }} dangerouslySetInnerHTML={{ __html: l.content }} />
-            </Card.Body>
-            <Card.Link href={l.link}>Go full reading</Card.Link>
-          </Card>
+            </Card>
+          </div>
         )
       })}
     </div>
