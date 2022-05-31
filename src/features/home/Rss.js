@@ -42,7 +42,6 @@ export default function Rss() {
   return (
     <div className="feed-page">
       {list.map((l, i) => {
-        console.log(l)
         return (
           <div className="site-card-border-less-wrapper">
             <Card

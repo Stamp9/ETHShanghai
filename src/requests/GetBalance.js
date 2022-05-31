@@ -1,9 +1,9 @@
 import Web3 from "web3";
 
 const TokenDict = {
-  UNI: '0x1f9840a85d5aF5bf1D1762F925BDADdC4201F984',
-  LINK: '0x01BE23585060835E02B77ef475b0Cc51aA1e0709',
-  ZRX: '0xddea378A6dDC8AfeC82C36E9b0078826bf9e68B6',
+  Uniswap: '0x1f9840a85d5aF5bf1D1762F925BDADdC4201F984',
+  Chainlink: '0x01BE23585060835E02B77ef475b0Cc51aA1e0709',
+  '0x': '0xddea378A6dDC8AfeC82C36E9b0078826bf9e68B6',
   DAI: '0x5592EC0cfb4dbc12D3aB100b257153436a1f0FEa'
 }
 
@@ -236,7 +236,7 @@ export default async function() {
   const account = accounts[0];
   const web3 = new Web3(window.ethereum);
 
-  let ret = {}
+  let ret = []
   console.log(TokenDict)
 
   for(let token in TokenDict) {
@@ -247,6 +247,6 @@ export default async function() {
     let hasToken = balance > 0
     ret[token] = hasToken
   }
-  console.log(ret)
+  console.log('GetBalance: ' + ret)
   return ret
 }

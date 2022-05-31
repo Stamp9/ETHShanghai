@@ -6,20 +6,26 @@ import { Menu } from 'antd';
 import { HomeOutlined, AppstoreOutlined, ReadOutlined } from '@ant-design/icons';
 import Connect from "../../requests/connect/connect";
 import GetBalance from "../../requests/GetBalance";
+import getBalance from "../../requests/GetBalance";
 
 
 
-export default function Header() {
+export default function Header(props) {
+
+  const [tokenList, setTokenList] = useState({})
   const [connect, setConnect] = useState(false)
+
+  useEffect(() => {
+    const getBalanceInner = async () => {
+      setTokenList(await getBalance())
+    };
+
+    getBalanceInner();
+  })
+
   const getConnectStatus = (val) => {
     setConnect(val);
   };
-
-  useEffect(() => {
-    if (connect) {
-      GetBalance()
-    }
-  })
 
   const history = useHistory();
   return (
@@ -28,13 +34,17 @@ export default function Header() {
         <Menu.Item key="home" icon={<HomeOutlined />} onClick={() => history.push('/welcome-page')}>
           Home
         </Menu.Item>
-        <Menu.SubMenu key="SubMenu" title="RSS" icon={<ReadOutlined />}>
-          <Menu.Item key="two" icon={<AppstoreOutlined />} onClick={() => history.push('/Rss')}>
-            Navigation Two
-          </Menu.Item>
-          <Menu.Item key="three" icon={<AppstoreOutlined />}>
-            Navigation Three
-          </Menu.Item>
+        <Menu.SubMenu key="SubMenu" title="Token" icon={<ReadOutlined />}>
+          {
+            Object.keys(tokenList).map((token) => {
+              if (tokenList[token]) {
+                return (
+                  <Menu.Item icon={<AppstoreOutlined />} onClick={() => history.push(`/Rss?name=${token}`)}>
+                    {token}
+                  </Menu.Item>
+                )
+              }
+            })}
         </Menu.SubMenu>
       </Menu>
       <div>

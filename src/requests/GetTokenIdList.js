@@ -5,7 +5,7 @@ function getIdFromPermaLink(link) {
   console.log(path)
   return path[path.length - 1]
 }
-export async function GetTokenIdList(account) {
+export async function GetTokenIdList(account, assetName) {
   console.log(account)
 
   const requestUrl = 'https://testnets-api.opensea.io/api/v1/assets?owner=' +
@@ -16,7 +16,9 @@ export async function GetTokenIdList(account) {
   let idList = []
   assetList.map((asset) => {
     console.log(asset)
-    idList.push(getIdFromPermaLink(asset.permalink))
+    if (asset.name === asset) {
+      idList.push(getIdFromPermaLink(asset.permalink));
+    }
   })
   console.log(idList)
   return idList

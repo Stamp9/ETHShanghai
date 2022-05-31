@@ -49,7 +49,6 @@ function ConnectChain(props) {
   //     Subscription(res)
   //   })
   // }
-  console.log(props.getConnect)
   props.getConnect.getConnect(connected)
 
   return (
