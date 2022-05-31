@@ -6,8 +6,6 @@ import { Web3ReactProvider, useWeb3React, } from '@web3-react/core'
 import { Web3Provider } from '@ethersproject/providers'
 import { useInactiveListener } from './hook'
 import './Connect.css';
-import {GetTokenIdList} from "../GetTokenIdList";
-import {Subscription} from "../subscription/Subscription";
 
 function getLibrary(provider) {
   const library = new Web3Provider(provider)
@@ -15,25 +13,12 @@ function getLibrary(provider) {
   return library
 }
 
-function Connect() {
+export default function Connect(props) {
   return (
-    <div>
-      <ConnectChain />
-    </div>
-  );
-}
-
-export function getCurrentAccount() {
-  const { connector, library, chainId, account, activate, deactivate, active, error } = useWeb3React();
-  return account;
-}
-
-export default function() {
-  return (
-    <Web3ReactProvider getLibrary={getLibrary}>
-      <Connect />
+    <Web3ReactProvider getLibrary={getLibrary} getConnect={props}>
+      <ConnectChain getConnect={props}/>
     </Web3ReactProvider>
-  )
+  );
 }
 
 function ConnectChain(props) {
@@ -57,13 +42,15 @@ function ConnectChain(props) {
   let isDisconnect = !error && chainId
   const buttonText = isDisconnect ? 'Disconnect' : (activating ? 'Connecting' : 'Connect' )
 
-  if (connected) {
-    console.log('Chain ID: ' + chainId)
-    console.log('Account: ' + account)
-    GetTokenIdList(account).then(res => {
-      Subscription(res)
-    })
-  }
+  // if (connected) {
+  //   console.log('Chain ID: ' + chainId)
+  //   console.log('Account: ' + account)
+  //   GetTokenIdList(account).then(res => {
+  //     Subscription(res)
+  //   })
+  // }
+  console.log(props.getConnect)
+  props.getConnect.getConnect(connected)
 
   return (
     <Button

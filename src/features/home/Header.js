@@ -1,12 +1,26 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 
 import { useHistory } from 'react-router-dom';
 
 import { Menu } from 'antd';
 import { HomeOutlined, AppstoreOutlined, ReadOutlined } from '@ant-design/icons';
 import Connect from "../../requests/connect/connect";
+import GetBalance from "../../requests/GetBalance";
+
+
 
 export default function Header() {
+  const [connect, setConnect] = useState(false)
+  const getConnectStatus = (val) => {
+    setConnect(val);
+  };
+
+  useEffect(() => {
+    if (connect) {
+      GetBalance()
+    }
+  })
+
   const history = useHistory();
   return (
     <div className="home-header">
@@ -24,8 +38,9 @@ export default function Header() {
         </Menu.SubMenu>
       </Menu>
       <div>
-        <Connect />
+        <Connect getConnect={getConnectStatus}/>
       </div>
+      <div>{connect}</div>
     </div>
   );
 };
