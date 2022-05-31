@@ -1,6 +1,10 @@
-import { WelcomePage, Page1 } from './';
+import { WelcomePage } from './';
+import Rss from './Rss'
 
 export default {
   path: '',
-  childRoutes: [{ path: 'welcome-page', component: WelcomePage, isIndex: true }, { path: 'page1', component: Page1 }],
+  childRoutes: [
+    { path: 'welcome-page', component: WelcomePage, isIndex: true },
+    { path: 'rss', component: Rss }
+  ],
 };
